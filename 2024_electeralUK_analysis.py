@@ -93,6 +93,45 @@ def options_menu():
     print('6. Find out who your MP is')
     print("7. Exit")
 
+def data_manage(database):
+    contituencies_info = {}
+    party_info = {}
+    party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
+    for row in database:
+        contituencies_name  = row['Constituency name']
+        country = row["Country name"]
+        Region = row['Region name']
+        Constituency_type = row['Constituency type']
+        first_name = row['Member first name']
+        last_name = row['Member surname']
+        gender = row['Member gender']
+        party = row['First party']
+        votes_of_winner = add_votes(row, party)
+        total_vote_of_constituency += sum(int(row[each_party].replace(',','') for each_party in party_columns))
+        valid_vote = row['Valid votes']
+        electotal  = row[""]
+       # votes = row.get(s_party, '0').replace(',', '')
+        
+        mp = MP(first_name, last_name,gender, party, votes_of_winner)
+        if contituencies_name not in contituencies_info:
+            contituencies_info[contituencies_name] = Constituency(contituencies_name, Region, country, Constituency_type, total_vote_of_constituency)
+            contituencies_info[contituencies_name].add_member(mp)
+
+
+        if party not in party_info:
+             party_info[party] = Party(party )
+        party_info[party].add_vote_of_selected(votes_of_winner)
+        party_info[party].add_member_party(mp.candidate_full_name)
+    return contituencies_info, party_info
+ 
+
+def add_votes(row, party):
+        C_votes = 0
+        if party in ['Ind', 'Spk', 'TUV']:
+                C_votes = row['Of which other winner'].replace(',', '')
+        else:
+                C_votes = row[party].replace(',', '')
+        return int(C_votes)
 
 def read_file(file_path): 
         row_data = []
