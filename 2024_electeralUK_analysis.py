@@ -171,6 +171,42 @@ def read_file(file_path):
             print('file not exit')
         return row_data
 
+# for option one from menue
+def constituncy_information(contituencies_info):
+    """ for option one from menue
+    Args:
+        contituencies_info (Dicts): dictionary contain list of objects from contituencies class
+    Raises:
+        ValueError: face of invalid input
+    Returns:
+        _type_: name of the contituency 
+    """
+    while True:
+        try:    
+            name = input('what consitituency name do you want to see: ').lower()
+            if not name.replace(' ', '').isalpha():
+                 raise ValueError('only alphabet please')
+            found = False
+            #print(name)
+            for value in contituencies_info.values(): 
+                #print(value.C_name.lower())
+                if value.C_name.lower() == name:
+                        print(value.get_description())
+                        found = True
+            if not found:
+                 print("Region not found, please try again.")
+    
+                    # Validate user input for continuation
+            while True:
+                get_answer = input('\nDo you want to try another name? Answer Y or N (Y/N): ').lower()
+                if get_answer == 'y':
+                    break  # Valid input, continue to the next iteration of the main loop
+                elif get_answer == 'n':
+                    return False # Valid input, exit the function
+                else:
+                    print("Invalid input. Please enter 'Y' or 'N'.")
+        except ValueError as e:
+             print(e)
 
 dataset = read_file('FullDataFor2024.csv')
 print(dataset[0:1])
