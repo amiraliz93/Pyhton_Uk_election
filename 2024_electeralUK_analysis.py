@@ -133,21 +133,25 @@ def add_votes(row, party):
                 C_votes = row[party].replace(',', '')
         return int(C_votes)
 
-def read_file(file_path): 
+def read_file(file_path):   
         row_data = []
         try:
             with open(file_path, 'r', encoding='latin1') as f:
                 next(f)
-                next(f)
+                #next(f)
                 read = csv.DictReader(f)
-                unwanted_key = ['ONS ID', 'ONS region ID']
+                #unwanted_key = ['ONS ID', 'ONS region ID']
                 #filtered_row = {key: row[key] for key in row if key not in ['ONS ID', 'ONS region ID']}
                 for row in read:
-                     for key in unwanted_key:
-                        del row[key]
+                   #  for key in unwanted_key:
+                    #    del row[key]
                      row_data.append(row)
                 #any(row_data.append(row) for row in read)
                 row_data = row_data[:-15]
         except FileNotFoundError:
             print('file not exit')
         return row_data
+
+
+dataset = read_file('FullDataFor2024.csv')
+print(dataset[0:1])
