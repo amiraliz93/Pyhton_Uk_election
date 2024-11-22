@@ -96,7 +96,7 @@ def options_menu():
 def data_manage(database):
     contituencies_info = {}
     party_info = {}
-    party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
+    #party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
     for row in database:
         contituencies_name  = row['Constituency name']
         country = row["Country name"]
@@ -107,14 +107,14 @@ def data_manage(database):
         gender = row['Member gender']
         party = row['First party']
         votes_of_winner = add_votes(row, party)
-        total_vote_of_constituency += sum(int(row[each_party].replace(',','') for each_party in party_columns))
+        #total_vote_of_party = sum(int(row[party].replace(',','') for each_party in party_columns))
         valid_vote = row['Valid votes']
-        electotal  = row[""]
+        electotal  = row["Electorate"]
        # votes = row.get(s_party, '0').replace(',', '')
         
         mp = MP(first_name, last_name,gender, party, votes_of_winner)
         if contituencies_name not in contituencies_info:
-            contituencies_info[contituencies_name] = Constituency(contituencies_name, Region, country, Constituency_type, total_vote_of_constituency)
+            contituencies_info[contituencies_name] = Constituency(contituencies_name, Region, country, Constituency_type, valid_vote, electotal)
             contituencies_info[contituencies_name].add_member(mp)
 
 
@@ -123,7 +123,26 @@ def data_manage(database):
         party_info[party].add_vote_of_selected(votes_of_winner)
         party_info[party].add_member_party(mp.candidate_full_name)
     return contituencies_info, party_info
- 
+
+def total_vote_party(data):
+     party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
+     while True:
+        print('\n'.join([f' {count}-\t {i}' for count, i in enumerate(party_columns, 1)]))
+        try: 
+            p_name = int(input(f' select the number of the party form the list (1- {len(party_columns)}) ')) 
+            if  0 < p_name <= len(party_columns):
+                party = party_columns[p_name - 1]
+                total_vote = 0
+                for row in data:
+                    if party in row:
+                        total_vote += int(row[party].replace(",", '') )
+                print(f" the total vote for the party: {party} \n \t is: {total_vote} ")
+                break
+            else:
+                print(f"Invalid input. Please enter a number in the range (1 - {len(party_columns)}).")
+        except ValueError:
+                print("Invalid input. Please enter a valid number.")
+
 
 def add_votes(row, party):
         C_votes = 0
