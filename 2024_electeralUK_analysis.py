@@ -143,6 +143,19 @@ def total_vote_party(data):
         except ValueError:
                 print("Invalid input. Please enter a valid number.")
 
+def get_candidat_information(consitituencies):
+
+    candidate_name = input('type a candidate full name: ').lower().strip()
+    found = False
+    for value in consitituencies.values():
+        #print(value)
+        if  value.candidate[0].candidate_full_name.lower() == candidate_name: 
+             #print( value.candidate[0].get_candidate_summary())
+             print(value.candidate[0])
+             found = True
+             break
+    if not found:
+             print(' the name not found')
 
 def add_votes(row, party):
         C_votes = 0
