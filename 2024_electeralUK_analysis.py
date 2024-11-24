@@ -157,6 +157,7 @@ def get_candidat_information(consitituencies):
     if not found:
              print(' the name not found')
 
+
 def add_votes(row, party):
         C_votes = 0
         if party in ['Ind', 'Spk', 'TUV']:
@@ -332,5 +333,7 @@ def main():
         except ValueError as e:
                 print('incorrect value')
 
-dataset = read_file('FullDataFor2024.csv')
-print(dataset[0:1])
+file_path ='Data.csv'
+database = read_file(file_path)
+
+contituencies_info, party_info = data_manage(database)
