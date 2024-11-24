@@ -333,7 +333,7 @@ def main():
         except ValueError as e:
                 print('incorrect value')
 
-file_path ='Data.csv'
+file_path ='FullDataFor2024.csv'
 database = read_file(file_path)
 
 contituencies_info, party_info = data_manage(database)
