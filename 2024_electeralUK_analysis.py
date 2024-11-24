@@ -208,5 +208,116 @@ def constituncy_information(contituencies_info):
         except ValueError as e:
              print(e)
 
+def find_your_MP(consitituencies):
+    # show list of the region
+    # first show the country name list and let user choose 
+    # choose region
+    # base on region show list of the constituncy
+    list_of_country = ["Wales", "Scotland", "England", "Northern Ireland"]
+    region_list = ["East Midlands", "East of England", "London", "North East", "North West", "South East", "South West", "West Midlands", "Yorkshire and The Humber"]
+    print(" List Of the Country ")
+    count = 1
+    for i in list_of_country:
+        print(count ,"\t:", i)
+        count += 1
+    #print("\n".join([f"{count}\t: {country}" for count, country in enumerate(list_of_country, 1)]))
+
+    country_input = str(input('Enter the name of the country: ').lower())
+    assert country_input.isalpha(), f"the input is not alphabet"
+    if country_input == "england":
+        print("choose one of the Region")
+        print("\n".join([f" {count} \t: {i}" for count, i in enumerate(region_list, 1)]))
+
+        region_input = str(input('Enter the name of the region: ').lower())
+        assert country_input.isalpha(), f"the input is not alphabet"
+        list = Constituency.list_of_contituency_by_region(consitituencies, region_input)
+        print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
+        while True:
+             try:
+                C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
+                constituency_name = list[C_input - 1]
+                consitituencies[constituency_name].display_constituency_information()
+                break
+             except ValueError:
+                  print("Invalid input. Please enter a number.")
+             except IndexError:
+                  print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
+
+    elif country_input == "wales":
+        list =  Constituency.list_of_contituency_by_region(consitituencies, country_input)
+        print("\n choose the name of the name of your constituency from the list \n")
+        print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
+        while True:
+             try:
+                C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
+                constituency_name = list[C_input - 1]
+                consitituencies[constituency_name].display_constituency_information()
+                break
+             except ValueError:
+                  print("Invalid input. Please enter a number.")
+             except IndexError:
+                  print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
+    
+    elif country_input == "scotland":
+        list =  Constituency.list_of_contituency_by_region(consitituencies, country_input)
+        print("\n choose the name of the name of your constituency from the list \n")
+        print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
+        while True:
+             try:
+                C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
+                constituency_name = list[C_input - 1]
+                consitituencies[constituency_name].display_constituency_information()
+                break
+             except ValueError:
+                  print("Invalid input. Please enter a number.")
+             except IndexError:
+                  print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
+
+    elif country_input == "northern ireland":
+        list =  Constituency.list_of_contituency_by_region(consitituencies, country_input)
+        print("\n choose the name of the name of your constituency from the list \n")
+        print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
+        while True:
+             try:
+                C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
+                constituency_name = list[C_input - 1]
+                consitituencies[constituency_name].display_constituency_information()
+                break
+             except ValueError:
+                  print("Invalid input. Please enter a number.")
+             except IndexError:
+                  print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
+    else:
+        Constituency.list_of_contituency_by_region(consitituencies, country_input)
+
+
+def main():
+    while True:
+        options_menu()
+        try: 
+            choice = input("Enter your choice (1, 2, 3,4, 5, 6 or 7 to exit): ")
+            if not choice.isdigit():
+                raise ValueError
+            options = ['1','2','3','4','5', '6']     
+            if choice in options:
+                    if choice == "1":
+                          constituncy_information(contituencies_info)
+                        # get_candidat_information(contituencies_info)
+                    elif choice == "2":
+                        total_vote_party(database)
+                    elif choice == "3":
+                        pass
+                    elif choice == '4':
+                         get_candidat_information(contituencies_info)
+                    elif choice == "5" :
+                        find_your_MP(contituencies_info)
+                    elif choice == '6':
+                        break
+                    break
+            else:
+                        print("Invalid choice. Please select 1, 2, or 3.")
+        except ValueError as e:
+                print('incorrect value')
+
 dataset = read_file('FullDataFor2024.csv')
 print(dataset[0:1])
