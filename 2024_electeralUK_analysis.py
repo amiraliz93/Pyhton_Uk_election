@@ -21,12 +21,13 @@ class MP:
         }
 
 class Constituency:
-    def __init__(self, constituency_name, region_name, country_name, Constituency_type, total_vote):
+    def __init__(self, constituency_name, region_name, country_name, Constituency_type, valid_vote, electoral):
         self.C_name = constituency_name
         self.region_name = region_name
         self.country_name = country_name
         self.C_type =  Constituency_type
-        self.total_vote = total_vote
+        self.valid_vote = valid_vote
+        self.electoral = electoral
         self.candidate = []
         self.discreption = {'Constituency name': self.C_name, 'Region name':self.region_name,'Constituency type':self.C_type}
 
@@ -161,7 +162,7 @@ def get_candidat_information(consitituencies):
 def add_votes(row, party):
         C_votes = 0
         if party in ['Ind', 'Spk', 'TUV']:
-                C_votes = row['Of which other winner'].replace(',', '')
+                C_votes = row['Independent winner vote'].replace(',', '')
         else:
                 C_votes = row[party].replace(',', '')
         return int(C_votes)
