@@ -27,7 +27,21 @@ This project analyzes UK General Election 2024 data, providing users with detail
   - `MP class`
   - `Party class`
   - `Constituency class`
-    
+
+  
+### Class Diagram
+
+| MP                 | 
+| --------                  |
+| `attribute 1`: Dictionary |
+| `attribute 1`: string     |
+| --------   |
+| `method1 ()`: string , explain method  |
+| `method2 ()`: string , explain method  |
+
+
+
+
 - **Data Structure**
      - Explain about different data structure and why used thoes. Like: List, Dictionary, and ...
 - **Key method**
