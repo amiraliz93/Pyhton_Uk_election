@@ -41,13 +41,17 @@ This project analyzes UK General Election 2024 data, providing users with detail
 
 
 
-
 - **Data Structure**
      - Explain about different data structure and why used thoes. Like: List, Dictionary, and ...
 - **Key method**
    Explain different `Method or Function` Here
 ## Testing and Validation
-Testing has been conducted for all primary functions to ensure accurate calculations, error handling, and smooth user interactions.
+
+<img src="/user-attachments/assets/5068f10e-6a50-424c-a15f-c4bbc94f6aa9" alt= "class Diagram" width= "500" height= "300" />
+
+![image](https://github.com/user-attachments/assets/5068f10e-6a50-424c-a15f-c4bbc94f6aa9)
+
+
 ## Installation Instructions
 - Install Require Dependencies (if applicable)
 1. Clone the repository:
