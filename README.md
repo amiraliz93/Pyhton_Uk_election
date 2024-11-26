@@ -47,9 +47,7 @@ This project analyzes UK General Election 2024 data, providing users with detail
    Explain different `Method or Function` Here
 ## Testing and Validation
 
-<img src="/user-attachments/assets/5068f10e-6a50-424c-a15f-c4bbc94f6aa9" alt= "class Diagram" width= "500" height= "300" />
-
-![image](https://github.com/user-attachments/assets/5068f10e-6a50-424c-a15f-c4bbc94f6aa9)
+<img src="/Test.PNG" alt= "class Diagram" width= "500" height= "300" />
 
 
 ## Installation Instructions
