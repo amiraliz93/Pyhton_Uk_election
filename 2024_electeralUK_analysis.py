@@ -1,88 +1,7 @@
 
 import csv
+from  Classes import Constituency, MP, Party
 
-class MP:
-    def __init__(self, f_name, l_name, gender, party, votes):
-        self.f_name = f_name
-        self.l_name = l_name
-        self.candidate_full_name = (self.f_name) + ' ' +(self.l_name)
-        self.party = party
-        self.votes = votes if votes is not None else 0
-        self.gender = gender
-    def __str__(self): # need to change
-        return f"{self.f_name}  {self.l_name},\nParty: {self.party},\nVotes: {self.votes},\nGender: {self.gender}"
-
-    def get_candidate_summary(self):
-        return {
-            'Full Name': self.candidate_full_name,
-            'Party': self.party,
-            'Votes': self.votes,
-            'Gender': self.gender
-        }
-
-class Constituency:
-    def __init__(self, constituency_name, region_name, country_name, Constituency_type, valid_vote, electoral):
-        self.C_name = constituency_name
-        self.region_name = region_name
-        self.country_name = country_name
-        self.C_type =  Constituency_type
-        self.valid_vote = valid_vote
-        self.electoral = electoral
-        self.candidate = []
-        self.discreption = {'Constituency name': self.C_name, 'Region name':self.region_name,'Constituency type':self.C_type}
-
-    def candidate_information(self):
-        print(self.candidate)
-    
-    def get_description(self):
-         return self.discreption
-    
-    def add_member(self, mp):
-        self.candidate.append(mp)
-    
-    @staticmethod
-    def list_of_contituency_by_region(consitituencies_list, region):
-        return [item.C_name for item in consitituencies_list.values() if item.region_name.lower() == region.lower() ]
-    
-
-    def display_constituency_information(self):
-        print(f"Constituency Name: {self.C_name}")
-        print(f"Region Name: {self.region_name}")
-        print(f"Country: {self.country_name}")
-        print(f"Type: {self.C_type}")
-        print("Candidates:")
-        print(self.candidate[0].get_candidate_summary())
-            #print(f"  - {candidate.candidate_full_name} - Candidate Party: ({candidate.party} total Vote: {candidate.v})")
-
-    def get_candidate_by_name(self, surname):
-        for candidate in self.candidates:
-            if candidate.candidate_surname.lower() == surname.lower():
-                return candidate
-        return None
-
-class Party:
-     def __init__(self, P_name):
-          self.P_name = P_name
-          self.total_selected_votes = 0
-          self.total_votes = 0
-          self.members = []
-        
-     def __str__(self):
-       return f' {self.P_name} \n Number of parliament seats that were achieved {len(self.members)} \n Member: \n {self.members} '
-     
-
-     def add_vote_of_selected(self, votes):
-        self.total_selected_votes += votes
-     
-     def calculate_avg_vote(self):
-          self.total_votes / len(self.members) if len(self.members) >0 else 0
-
-
-     def add_member_party(self, member):
-          if member not in self.members:
-            self.members.append(member)
-          
-     
 
 def options_menu():
     print("\n--- Voting Analysis Program ---")
@@ -95,27 +14,37 @@ def options_menu():
     print("7. Exit")
 
 def data_manage(database):
+    """Create object from classes to encapsulate data
+
+    Args:
+        database (Dictionary): consis of list of row data
+
+    Returns:
+        return list: of dictionary of objects from Party and Constituency classes_
+    """
     contituencies_info = {}
     party_info = {}
     #party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
+    # low to get each row from dataset
     for row in database:
         contituencies_name  = row['Constituency name']
         country = row["Country name"]
-        Region = row['Region name']
-        Constituency_type = row['Constituency type']
+        region = row['Region name']
         first_name = row['Member first name']
         last_name = row['Member surname']
         gender = row['Member gender']
         party = row['First party']
         votes_of_winner = add_votes(row, party)
         #total_vote_of_party = sum(int(row[party].replace(',','') for each_party in party_columns))
-        valid_vote = row['Valid votes']
+        
+        total_voted = row['Valid votes'].replace(",", '') + row['Invalid votes'].replace(",", '')
         electotal  = row["Electorate"]
        # votes = row.get(s_party, '0').replace(',', '')
-        
+
         mp = MP(first_name, last_name,gender, party, votes_of_winner)
+        # create objects from constituency class 
         if contituencies_name not in contituencies_info:
-            contituencies_info[contituencies_name] = Constituency(contituencies_name, Region, country, Constituency_type, valid_vote, electotal)
+            contituencies_info[contituencies_name] = Constituency(contituencies_name, region, country, total_voted, electotal)
             contituencies_info[contituencies_name].add_member(mp)
 
 
@@ -125,9 +54,14 @@ def data_manage(database):
         party_info[party].add_member_party(mp.candidate_full_name)
     return contituencies_info, party_info
 
-def total_vote_party(data):
-     party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
-     while True:
+def total_vote_each_party(data):
+    """get total vote for each party
+
+    Args:
+        data (list of dictionary): return number of total vote for given party
+    """
+    party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
+    while True:
         print('\n'.join([f' {count}-\t {i}' for count, i in enumerate(party_columns, 1)]))
         try: 
             p_name = int(input(f' select the number of the party form the list (1- {len(party_columns)}) ')) 
@@ -319,7 +253,7 @@ def main():
                           constituncy_information(contituencies_info)
                         # get_candidat_information(contituencies_info)
                     elif choice == "2":
-                        total_vote_party(database)
+                        total_vote_each_party(database)
                     elif choice == "3":
                         pass
                     elif choice == '4':
@@ -338,3 +272,5 @@ file_path ='FullDataFor2024.csv'
 database = read_file(file_path)
 
 contituencies_info, party_info = data_manage(database)
+
+main()
