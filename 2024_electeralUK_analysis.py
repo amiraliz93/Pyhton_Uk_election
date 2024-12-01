@@ -60,7 +60,7 @@ def total_vote_each_party(data):
     Args:
         data (list of dictionary): return number of total vote for given party
     """
-    party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
+    party_columns = ['Constitution:', 'Labour Party', 'Liberal Democrats', 'RUK', 'Green', 'Scottish National Party (SNP)', 'PC', 'Democratic Unionist Party (DUP)', 'Sinn Féin (SF)', 'Social Democratic and Labour Party (SDLP)', 'Ulster Unionist Party (UUP)', 'APNI', "Of which other winner"]
     while True:
         print('\n'.join([f' {count}-\t {i}' for count, i in enumerate(party_columns, 1)]))
         try: 
@@ -71,10 +71,13 @@ def total_vote_each_party(data):
                 for row in data:
                     if party in row:
                         total_vote += int(row[party].replace(",", '') )
-                print(f" the total vote for the party: {party} \n \t is: {total_vote} ")
+                print("*" * 50)
+                print(f" The total vote for the party: {party} \n \t is: {total_vote} ")
+                print("*" * 50)
                 break
             else:
                 print(f"Invalid input. Please enter a number in the range (1 - {len(party_columns)}).")
+
         except ValueError:
                 print("Invalid input. Please enter a valid number.")
 
