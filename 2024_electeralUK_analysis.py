@@ -72,7 +72,7 @@ def total_vote_each_party(data):
                     if party in row:
                         total_vote += int(row[party].replace(",", '') )
                 print("*" * 50)
-                print(f" The total vote for the party: {party} \n \t is: {total_vote} ")
+                print(f" The total vote for the party: s{party} \n \t is: {total_vote} ")
                 print("*" * 50)
                 break
             else:
@@ -97,16 +97,33 @@ def get_candidat_information(consitituencies):
 
 
 def add_votes(row, party):
-        C_votes = 0
-        if party in ['Ind', 'Spk', 'TUV']:
+    """calculate total vote for winner party for each constituency
+
+    Args:
+        row (dictionary): row of data set
+        party (tuple)
+
+    Returns:
+        int: total vote
+    """
+    C_votes = 0
+    if party in ['Ind', 'Spk', 'TUV']:
                 C_votes = row['Independent winner vote'].replace(',', '')
-        else:
+    else:
                 C_votes = row[party].replace(',', '')
-        return int(C_votes)
+    return int(C_votes)
 
 def read_file(file_path):   
-        row_data = []
-        try:
+    """read data from csv file and store in a list
+
+    Args:
+        file_path (csv): initial dataset
+
+    Returns:
+        list: list of rows 
+    """
+    row_data = []
+    try:
             with open(file_path, 'r', encoding='latin1') as f:
                 next(f)
                 #next(f)
@@ -119,9 +136,9 @@ def read_file(file_path):
                      row_data.append(row)
                 #any(row_data.append(row) for row in read)
                 row_data = row_data[:-15]
-        except FileNotFoundError:
+    except FileNotFoundError:
             print('file not exit')
-        return row_data
+    return row_data
 
 # for option one from menue
 def constituncy_information(contituencies_info):
