@@ -152,9 +152,10 @@ def constituncy_information(contituencies_info):
     """
     while True:
         try:    
+            print("*" * 50 , "\n", " Choose Your Option ")
             name = input('what consitituency name do you want to see: ').lower()
             if not name.replace(' ', '').isalpha():
-                 raise ValueError('only alphabet please')
+                 raise ValueError('Not Valid input, Only alphabet please')
             found = False
             #print(name)
             for value in contituencies_info.values(): 
@@ -259,34 +260,59 @@ def find_your_MP(consitituencies):
     else:
         Constituency.list_of_contituency_by_region(consitituencies, country_input)
 
+def exit_program():
+    print("Exiting the program. Goodbye!")
+    exit()
 
 def main():
     while True:
         options_menu()
         try: 
-            choice = input("Enter your choice (1, 2, 3,4, 5, 6 or 7 to exit): ")
-            if not choice.isdigit():
-                raise ValueError
-            options = ['1','2','3','4','5', '6']     
-            if choice in options:
+                choice = input("Enter your choice (1, 2, 3,4, 5, or 6 to exit): ")
+                if not choice.isdigit():
+                    raise ValueError
+                options = ['1','2','3','4','5', '6']     
+                if choice in options:
                     if choice == "1":
-                          constituncy_information(contituencies_info)
-                        # get_candidat_information(contituencies_info)
+                        while True:
+                                try:
+                                    print(" ---- Choose your option ----")
+                                    print("1. View Constituency list")
+                                    print("2. Know your constituency name")
+                                    print("3. Find your constituency based on your region and country")
+                                    print("4. Get back to main menu")
+                                    print("5. Exit program")
+                                    second_choice = input("Enter your choice (1, 2, 3, or 4 to exit): ")
+                                    if second_choice == "1":
+                                        pass
+                                    elif second_choice =='2':
+                                        constituncy_information(contituencies_info)
+                                    elif second_choice =="3":
+                                        pass
+                                    elif second_choice =="4":
+                                        break
+                                    elif second_choice == '5':
+                                        exit_program()
+                                    else:
+                                        raise ValueError
+                                except ValueError:
+                                    print("invalid input")
+                                    
                     elif choice == "2":
-                        total_vote_each_party(database)
+                            total_vote_each_party(database)
                     elif choice == "3":
-                        pass
+                            pass
                     elif choice == '4':
-                         get_candidat_information(contituencies_info)
+                            get_candidat_information(contituencies_info)
                     elif choice == "5" :
-                        find_your_MP(contituencies_info)
+                            find_your_MP(contituencies_info)
                     elif choice == '6':
-                        break
-                    break
-            else:
-                        print("Invalid choice. Please select 1, 2, or 3.")
+                            exit_program()
+                
+                else:
+                         print("Invalid choice. Please select 1, 2, or 3.")
         except ValueError as e:
-                print('incorrect value')
+                    print('incorrect value')
 
 file_path ='FullDataFor2024.csv'
 database = read_file(file_path)

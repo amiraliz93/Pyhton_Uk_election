@@ -43,18 +43,21 @@ class Party:
             self.members.append(member)
 
 class Constituency:
-    def __init__(self, constituency_name, region_name, country_name, Constituency_type, total_vote):
+    def __init__(self, constituency_name, region_name, country_name, Constituency_type, total_voted, total_voters):
+
         self.C_name = constituency_name
         self.region_name = region_name
         self.country_name = country_name
         self.C_type =  Constituency_type
-        self.total_vote = total_vote
+        self.total_vote = total_voted
+        self.totalvoters = total_voters
         self.candidate = []
+        self.constituency_list = []
         self.discreption = {'Constituency name': self.C_name, 'Region name':self.region_name,'Constituency type':self.C_type}
-
-    def candidate_information(self):
-        print(self.candidate)
     
+    def __str__(self):
+        f" the name of constituency is {self.name}"
+
     def get_description(self):
          return self.discreption
     
@@ -65,6 +68,8 @@ class Constituency:
     def list_of_contituency_by_region(consitituencies_list, region):
         return [item.C_name for item in consitituencies_list.values() if item.region_name.lower() == region.lower() ]
     
+    def list_of_constituency(self):
+        self.constituency_list.append(self.C_name)
 
     def display_constituency_information(self):
         print(f"Constituency Name: {self.C_name}")
