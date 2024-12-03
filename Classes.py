@@ -29,19 +29,20 @@ class Party:
           self.members = []
         
      def __str__(self):
-       return f' {self.P_name} \n Number of parliament seats that were achieved {len(self.members)} \n Member: \n {self.members} '
+       members_str = "\n".join(str(member) for member in self.members)
+       return f'{self.P_name}\n Number of parliament seats that were ach'
      
 
      def add_vote_of_selected(self, votes):
         self.total_selected_votes += votes
      
      def calculate_avg_vote(self):
-          self.total_votes / len(self.members) if len(self.members) >0 else 0
-
+          return self.total_votes / len(self.members) if len(self.members) >0 else 0
+    
 
      def add_member_party(self, member):
           if member not in self.members:
-            self.members.append(member)
+             self.members.append(member)
 
 class Constituency:
 

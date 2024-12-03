@@ -10,7 +10,8 @@ def options_menu():
     print("3. View Party Information")
     print("4. View Candidate information")
     print('5. Find out who your MP is')
-    print("6. Exit")
+    print("6. save your statics to a file")
+    print("7. Exit")
 
 def data_manage(database):
     """Create object from classes to encapsulate data
@@ -52,32 +53,38 @@ def data_manage(database):
         party_info[party].add_member_party(mp.candidate_full_name)
     return contituencies_info, party_info
 
-def total_vote_each_party(data):
+def total_vote_each_party(data, party_name= None):
     """get total vote for each party
 
     Args:
         data (list of dictionary): return number of total vote for given party
     """
-    party_columns = ['Constitution:', 'Labour Party', 'Liberal Democrats', 'RUK', 'Green', 'Scottish National Party (SNP)', 'PC', 'Democratic Unionist Party (DUP)', 'Sinn Féin (SF)', 'Social Democratic and Labour Party (SDLP)', 'Ulster Unionist Party (UUP)', 'APNI', "Of which other winner"]
-    while True:
-        print('\n'.join([f' {count}-\t {i}' for count, i in enumerate(party_columns, 1)]))
-        try: 
-            p_name = int(input(f' select the number of the party form the list (1- {len(party_columns)}) ')) 
-            if  0 < p_name <= len(party_columns):
-                party = party_columns[p_name - 1]
-                total_vote = 0
-                for row in data:
-                    if party in row:
-                        total_vote += int(row[party].replace(",", '') )
-                print("*" * 50)
-                print(f" The total vote for the party: s{party} \n \t is: {total_vote} ")
-                print("*" * 50)
-                break
-            else:
-                print(f"Invalid input. Please enter a number in the range (1 - {len(party_columns)}).")
+    if party_name is None:
+        party_columns = ['Constitution:', 'Labour Party', 'Liberal Democrats', 'RUK', 'Green', 'Scottish National Party (SNP)', 'PC', 'Democratic Unionist Party (DUP)', 'Sinn Féin (SF)', 'Social Democratic and Labour Party (SDLP)', 'Ulster Unionist Party (UUP)', 'APNI', "Of which other winner"]
+        while True:
+            print('\n'.join([f' {count}-\t {i}' for count, i in enumerate(party_columns, 1)]))
+            try: 
+                p_name = int(input(f' select the number of the party form the list (1- {len(party_columns)}) ')) 
+                if  0 < p_name <= len(party_columns):
+                    party = party_columns[p_name - 1]
+                    total_vote = 0
+                    for row in data:
+                        if party in row:
+                            total_vote += int(row[party].replace(",", '') )
+                    print("*" * 50)
+                    print(f" The total vote for the party: s{party} \n \t is: {total_vote} ")
+                    print("*" * 50)
+                    break
+                else:
+                    print(f"Invalid input. Please enter a number in the range (1 - {len(party_columns)}).")
 
-        except ValueError:
-                print("Invalid input. Please enter a valid number.")
+            except ValueError:
+                    print("Invalid input. Please enter a valid number.")
+    else:
+        for row in data:
+            if party_name in row:
+                total_vote += int(row[party].replace(",", '') )
+            return total_vote
 
 def get_candidat_information(consitituencies):
 
@@ -283,6 +290,44 @@ def find_MP_or_constituency(consitituencies,order=0):
     else:
         Constituency.list_of_contituency_by_region(consitituencies, country_input)
 
+def extract_party_static(party_dcitionary):
+    party_statics = {}
+    party_list = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
+    print("".join([f"{count}:, {i}\n" for count , i in party_list]))
+    p_name = int(input('choose a number of the party'))
+    if 0< p_name <= len(party_list):  
+        for obj in party_dcitionary.values:
+            if obj.name.lower() == p_name.lower():
+                party_statics[obj.name] = {
+                     'total_vote_of_selected': obj.total_selected_votes,
+                     'average_vote_for_this_Party': obj.calculate_avg_vote(),
+                     'Number_of_member_list': len(obj.members),
+                     'total_vote_for_party':  total_vote_each_party(database, obj.name),
+                     'Member_List': obj.members
+                }   
+        return party_statics
+    else:
+         print("invalid input")  
+
+             
+
+def save_statics(vote_statics):
+    with open('save_statics.csv', 'w', newline="") as f:
+         f.write("Voting Statistics\n")
+         f.write("================\n")
+         fieldnames = ['Party', 'Total Votes', 'Total Selected Votes', 'Average Vote',  'Number of Party Members', 'Member List' ]
+         writer = csv.DictWriter(f, fieldnames)
+         writer.writeheader()
+         for party, statics in vote_statics.items():
+              writer.writerow({
+                   'Party': party,
+                   'Total Selected Votes': statics['total_vote_of_selected'],
+                   'Total Votes': statics['total_vote_for_party'],
+                   'average vote for this Party': statics['average_vote_for_this_Party'],
+                   'Number of Party Members': statics['Number_of_member_list'],
+                   'Members List': statics['Member_List']})
+
+
 def ask_to_exit():
     while True:
         input_user = input(" To get back to main menu type Y or N to exit program (Y/N): ").lower()
@@ -298,10 +343,10 @@ def main():
     while True:
         options_menu()
         try: 
-                choice = input("Enter your choice (1, 2, 3,4, 5, or 6 to exit): ")
+                choice = input("Enter your choice (1, 2, 3, 4, 5, or 6 to exit): ")
                 if not choice.isdigit():
                     raise ValueError
-                options = ['1','2','3','4','5', '6']     
+                options = ['1', '2', '3', '4', '5', '6']    
                 if choice in options:
                     if choice == "1":
                         while True:
@@ -331,7 +376,16 @@ def main():
                     elif choice == "2":
                             total_vote_each_party(database)
                     elif choice == "3":
-                            pass
+                         print('number 3')
+                         party_data = extract_party_static(party_info)
+                            #save_question = input(' Do you want save statics Y/N: ').lower()
+                            #if save_question == 'y':
+                               # save_statics(party_data)
+                            #if ask_to_exit():
+                             #    break
+                            #else:
+                             #    exit()
+                            
                     elif choice == '4':
                             get_candidat_information(contituencies_info)
                     elif choice == "5" :
@@ -340,13 +394,15 @@ def main():
                             break
                 
                 else:
-                         print("Invalid choice. Please select 1, 2, or 3.")
-        except ValueError as e:
-                    print('incorrect value')
+                         print("Invalid choice. Please select 1, 2, 3, 4, 5, or 6.")
+        except ValueError:
+                    print('incorrect value, only number acceptable')
+
 
 file_path ='FullDataFor2024.csv'
 database = read_file(file_path)
 
 contituencies_info, party_info = data_manage(database)
-
-main()
+for i in party_info.values():
+    print(i)
+#main()
