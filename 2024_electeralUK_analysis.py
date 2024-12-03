@@ -23,7 +23,6 @@ def data_manage(database):
     """
     contituencies_info = {}
     party_info = {}
-    #party_columns = ['Con', 'Lab', 'LD', 'RUK', 'Green', 'SNP', 'PC', 'DUP', 'SF', 'SDLP', 'UUP', 'APNI', "Of which other winner"]
     # low to get each row from dataset
     for row in database:
         contituencies_name  = row['Constituency name']
@@ -36,7 +35,7 @@ def data_manage(database):
         votes_of_winner = add_votes(row, party)
         #total_vote_of_party = sum(int(row[party].replace(',','') for each_party in party_columns))
         
-        total_voted = row['Valid votes'].replace(",", '') + row['Invalid votes'].replace(",", '')
+        total_voted = int(row['Valid votes'].replace(",", '')) + int(row['Invalid votes'].replace(",", ''))
         electotal  = row["Electorate"]
        # votes = row.get(s_party, '0').replace(',', '')
 
@@ -177,11 +176,12 @@ def constituncy_information(contituencies_info):
         except ValueError as e:
              print(e)
 
-def find_your_MP(consitituencies):
+def find_MP_or_constituency(consitituencies,order=0):
     # show list of the region
     # first show the country name list and let user choose 
     # choose region
     # base on region show list of the constituncy
+    # order value define this function tent to work for which oprion menu for option 5 or option 3. Find your constituency based on your region and country
     list_of_country = ["Wales", "Scotland", "England", "Northern Ireland"]
     region_list = ["East Midlands", "East of England", "London", "North East", "North West", "South East", "South West", "West Midlands", "Yorkshire and The Humber"]
     print(" List Of the Country ")
@@ -205,10 +205,14 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
-                print("*" * 50)
-                consitituencies[constituency_name].display_constituency_information()
-                print("*" * 50)
-                break
+                if order == 0: 
+                    consitituencies[constituency_name].display_candidate_info()
+                else:
+                     consitituencies[constituency_name].display_constituncy_info() 
+                if not ask_to_exit:
+                      exit()    
+                else:
+                     break
              except ValueError:
                   print("Invalid input. Please enter a number.")
              except IndexError:
@@ -222,10 +226,14 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
-                print("*" * 50)
-                consitituencies[constituency_name].display_constituency_information()
-                print("*" * 50)
-                break
+                if order == 0:
+                    consitituencies[constituency_name].display_candidate_info()
+                else:
+                     consitituencies[constituency_name].display_constituncy_info()
+                if not ask_to_exit():
+                      exit()    
+                else:
+                     break
              except ValueError:
                   print("Invalid input. Please enter a number.")
              except IndexError:
@@ -239,10 +247,14 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
-                print("*" * 50)
-                consitituencies[constituency_name].display_constituency_information()
-                print("*" * 50)
-                exit_program()
+                if order == 0:
+                    consitituencies[constituency_name].display_candidate_info()
+                else:
+                     consitituencies[constituency_name].display_constituncy_info()
+                if not ask_to_exit():
+                      exit()    
+                else:
+                     break
              except ValueError:
                   print("Invalid input. Please enter a number.")
              except IndexError:
@@ -256,10 +268,14 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
-                print("*" * 50)
-                consitituencies[constituency_name].display_constituency_information()
-                print("*" * 50)
-                break
+                if order == 0:
+                    consitituencies[constituency_name].display_candidate_info()
+                else:
+                     consitituencies[constituency_name].display_constituncy_info()
+                if not ask_to_exit():
+                      exit()    
+                else:
+                     break
              except ValueError:
                   print("Invalid input. Please enter a number.")
              except IndexError:
@@ -267,9 +283,16 @@ def find_your_MP(consitituencies):
     else:
         Constituency.list_of_contituency_by_region(consitituencies, country_input)
 
-def exit_program():
-    print("Exiting the program. Goodbye!")
-    exit()
+def ask_to_exit():
+    while True:
+        input_user = input(" To get back to main menu type Y or N to exit program (Y/N): ").lower()
+        if input_user == 'y':
+                return True
+        elif input_user == "n":
+                print("Exiting the program. Goodbye!")
+                return False
+        else:
+                print("Inalid Value please type Y or N")
 
 def main():
     while True:
@@ -295,11 +318,11 @@ def main():
                                     elif second_choice =='2':
                                         constituncy_information(contituencies_info)
                                     elif second_choice =="3":
-                                        pass
+                                        find_MP_or_constituency(contituencies_info, order=1)
                                     elif second_choice =="4":
                                         break
                                     elif second_choice == '5':
-                                        exit_program()
+                                             exit()
                                     else:
                                         raise ValueError
                                 except ValueError:
@@ -312,9 +335,9 @@ def main():
                     elif choice == '4':
                             get_candidat_information(contituencies_info)
                     elif choice == "5" :
-                            find_your_MP(contituencies_info)
+                            find_MP_or_constituency(contituencies_info)
                     elif choice == '6':
-                            exit_program()
+                            break
                 
                 else:
                          print("Invalid choice. Please select 1, 2, or 3.")
