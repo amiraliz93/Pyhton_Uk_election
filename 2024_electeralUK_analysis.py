@@ -7,11 +7,10 @@ def options_menu():
     print("\n--- Voting Analysis Program ---")
     print("1. View a Constituency Information")
     print("2. Display Total Votes for a Party")
-    print("3. List all the constituencies by Region name ")
-    print("4. View Party Information")
-    print("5. View Candidate information")
-    print('6. Find out who your MP is')
-    print("7. Exit")
+    print("3. View Party Information")
+    print("4. View Candidate information")
+    print('5. Find out who your MP is')
+    print("6. Exit")
 
 def data_manage(database):
     """Create object from classes to encapsulate data
@@ -206,7 +205,9 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
+                print("*" * 50)
                 consitituencies[constituency_name].display_constituency_information()
+                print("*" * 50)
                 break
              except ValueError:
                   print("Invalid input. Please enter a number.")
@@ -221,7 +222,9 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
+                print("*" * 50)
                 consitituencies[constituency_name].display_constituency_information()
+                print("*" * 50)
                 break
              except ValueError:
                   print("Invalid input. Please enter a number.")
@@ -236,8 +239,10 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
+                print("*" * 50)
                 consitituencies[constituency_name].display_constituency_information()
-                break
+                print("*" * 50)
+                exit_program()
              except ValueError:
                   print("Invalid input. Please enter a number.")
              except IndexError:
@@ -251,7 +256,9 @@ def find_your_MP(consitituencies):
              try:
                 C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                 constituency_name = list[C_input - 1]
+                print("*" * 50)
                 consitituencies[constituency_name].display_constituency_information()
+                print("*" * 50)
                 break
              except ValueError:
                   print("Invalid input. Please enter a number.")
@@ -284,7 +291,7 @@ def main():
                                     print("5. Exit program")
                                     second_choice = input("Enter your choice (1, 2, 3, or 4 to exit): ")
                                     if second_choice == "1":
-                                        pass
+                                       print( "".join([f" _____ \n {count}\t: {i} \n"for count, i in enumerate(Constituency.constituency_list, 1)]))
                                     elif second_choice =='2':
                                         constituncy_information(contituencies_info)
                                     elif second_choice =="3":

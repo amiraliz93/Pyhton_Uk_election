@@ -43,18 +43,19 @@ class Party:
             self.members.append(member)
 
 class Constituency:
-    def __init__(self, constituency_name, region_name, country_name, Constituency_type, total_voted, total_voters):
+
+    constituency_list = []
+    def __init__(self, constituency_name, region_name, country_name, total_voted, total_voters):
 
         self.C_name = constituency_name
         self.region_name = region_name
         self.country_name = country_name
-        self.C_type =  Constituency_type
         self.total_vote = total_voted
         self.totalvoters = total_voters
         self.candidate = []
-        self.constituency_list = []
-        self.discreption = {'Constituency name': self.C_name, 'Region name':self.region_name,'Constituency type':self.C_type}
-    
+        self.discreption = {'Constituency name': self.C_name, 'Region name':self.region_name,'Total Voted':self.totalvoters}
+
+        Constituency.constituency_list.append(self.C_name)
     def __str__(self):
         f" the name of constituency is {self.name}"
 
@@ -68,14 +69,13 @@ class Constituency:
     def list_of_contituency_by_region(consitituencies_list, region):
         return [item.C_name for item in consitituencies_list.values() if item.region_name.lower() == region.lower() ]
     
-    def list_of_constituency(self):
-        self.constituency_list.append(self.C_name)
+        
 
     def display_constituency_information(self):
         print(f"Constituency Name: {self.C_name}")
         print(f"Region Name: {self.region_name}")
         print(f"Country: {self.country_name}")
-        print(f"Type: {self.C_type}")
+        print(f"total voted: {self.totalvoters}")
         print("Candidates:")
         print(self.candidate[0].get_candidate_summary())
             #print(f"  - {candidate.candidate_full_name} - Candidate Party: ({candidate.party} total Vote: {candidate.v})")
