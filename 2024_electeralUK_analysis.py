@@ -403,6 +403,6 @@ file_path ='FullDataFor2024.csv'
 database = read_file(file_path)
 
 contituencies_info, party_info = data_manage(database)
-for i in party_info.values():
-    print(i)
-#main()
+#for i in party_info.values():
+   # print(i)
+main()
