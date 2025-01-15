@@ -1,7 +1,8 @@
 
 import csv
-from  Classes import Constituency, MP, Party
-
+from  Classes.Constituency_class import Constituency
+from  Classes.MP_class import MP
+from  Classes.Party_class import Party
 
 def options_menu():
     print("\n--- Voting Analysis Program ---")
