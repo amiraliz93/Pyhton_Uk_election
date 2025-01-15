@@ -4,6 +4,7 @@ from  Classes.Constituency_class import Constituency
 from  Classes.MP_class import MP
 from  Classes.Party_class import Party
 
+
 def options_menu():
     print("\n--- Voting Analysis Program ---")
     print("1. View a Constituency Information")
@@ -113,8 +114,8 @@ def add_votes(row, party):
         int: total vote
     """
     C_votes = 0
-    if row[party] == '':
-         print(i)
+    if row.get(party) == '':
+         print(f"Missing vote count for party: {party}")
     if party in ['Ind', 'Spk', 'TUV']:
                 C_votes = row['Independent winner vote'].replace(',', '')
     else:
