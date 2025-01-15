@@ -112,6 +112,8 @@ def add_votes(row, party):
         int: total vote
     """
     C_votes = 0
+    if row[party] == '':
+         print(i)
     if party in ['Ind', 'Spk', 'TUV']:
                 C_votes = row['Independent winner vote'].replace(',', '')
     else:
