@@ -64,9 +64,9 @@ class VotingAnalysis:
 
             mp = MP(first_name, last_name,gender, party, votes_of_winner)
             # create objects from constituency class 
-            if contituencies_name not in self.contituencies_info:
-                self.contituencies_info[contituencies_name] = Constituency(contituencies_name, region, country, total_voted, electotal)
-                self.contituencies_info[contituencies_name].add_member(mp)
+            if contituencies_name not in self.constituencies_info:
+                self.constituencies_info[contituencies_name] = Constituency(contituencies_name, region, country, total_voted, electotal)
+                self.constituencies_info[contituencies_name].add_member(mp)
 
 
             if party not in self.party_info:
@@ -81,9 +81,9 @@ class VotingAnalysis:
         try:
 
             if party in ['Ind', 'Spk', 'TUV']:
-                     return int(C_votes = row['Independent winner vote'].replace(',', ''))
+                     return int( row['Independent winner vote'].replace(',', ''))
             else:
-                        return int(C_votes = row[party].replace(',', '')) 
+                        return int( row[party].replace(',', '')) 
         except (KeyError, ValueError):
             print(f"Invalid data for party: {party}")
             return 0
@@ -155,6 +155,34 @@ class VotingAnalysis:
             return party_statics
         else:
             print("invalid input")  
+
+    def sub_menu(self):
+        while True:
+            try:
+                print(" ---- Choose your option ----")
+                print("1. View Constituency list")
+                print("2. Know your constituency name")
+                print("3. Find your constituency based on your region and country")
+                print("4. Get back to main menu")
+                print("5. Exit program")
+
+                choice = input("Enter your choice (1, 2, 3, or 4 to exit): ")
+
+                if choice == "1":
+                            print( "".join([f" _____ \n {count}\t: {i} \n"for count, i in enumerate(Constituency.constituency_list, 1)]))
+                elif choice =='2':
+                            self.constituncy_information
+                elif choice =="3":
+                            self.find_MP_or_constituency(order=1)
+                elif choice =="4":
+                            break
+                elif choice == '5':
+                            self.exit_program()
+                else:
+                     raise ValueError
+            except ValueError:
+                 print('invalid input')
+                 
 
     def constituncy_information(self):
         """ for option one from menue
@@ -341,7 +369,7 @@ class VotingAnalysis:
     
     def display_menu(self):
         menu_option =  {
-            '1': self.constituncy_information,
+            '1': self.sub_menu,
             '2': self.total_vote_each_party,
             '3': self.extract_party_static,
             '4': self.get_candidat_information,
