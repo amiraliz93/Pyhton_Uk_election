@@ -1,4 +1,6 @@
 class Party:
+     """Encapsulate attribute related to the party class
+     """
      def __init__(self, P_name):
           self.P_name = P_name
           self.total_selected_votes = 0
