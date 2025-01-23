@@ -8,11 +8,11 @@ from  Classes.Party_class import Party
 
 class VotingAnalysis:
     def __init__(self, file_path):
-        self.file_path = file_path
-        self.constituencies_info = {}
-        self.party_info = {}
-        self.database = self.read_file()
-        self.initialize_data()
+        self.__file_path = file_path
+        self.__constituencies_info = {}
+        self.__party_info = {}
+        self.__database = self.read_file()
+        self.__initialize_data()
    
 
 
@@ -37,7 +37,7 @@ class VotingAnalysis:
             print("6. save your statics to a file")
             print("7. Exit")
 
-            choice = input("Enter your choice: (1-6):")
+            choice  = self._vaidate_input("Enter your choice: (1-6):",1,6 )
 
             action = menu_option.get(choice)
             if action:
@@ -57,17 +57,16 @@ class VotingAnalysis:
             """
             row_data = []
             try:
-                    with open(self.file_path, 'r', encoding='latin1') as f:
+                    with open(self.__file_path, 'r', encoding='latin1') as f:
                         next(f)
                         read = csv.DictReader(f)
-
                         for row in read:
                             row_data.append(row)
                         #any(row_data.append(row) for row in read)
                         row_data = row_data[:-15]
             except Exception as e:
                 if e.__class__ == FileNotFoundError:
-                    print(f" {utility.color_red}Error: File {utility.color_reset} '{self.file_path}' not found.")     
+                    print(f" {utility.color_red}Error: File {utility.color_reset} '{self.__file_path}' not found.")     
                 else:
                     print(f"An error occurred: {e}")
             return row_data
@@ -75,15 +74,13 @@ class VotingAnalysis:
 
     def initialize_data(self):
             """Create object from classes to encapsulate data
-
             Args:
                 database (Dictionary): consis of list of row data
-
             Returns:
                 return list: of dictionary of objects from Party and Constituency classes_
             """
             # low to get each row from dataset
-            for row in self.database:
+            for row in self.__database:
                 contituencies_name  = row['Constituency name']
                 country = row["Country name"]
                 region = row['Region name']
@@ -97,18 +94,16 @@ class VotingAnalysis:
                 
                 total_voted = int(row['Valid votes'].replace(",", '')) + int(row['Invalid votes'].replace(",", ''))
                 # votes = row.get(s_party, '0').replace(',', '')
-
                 mp = MP(first_name, last_name,gender, party, votes_of_winner)
                 # create objects from constituency class 
-                if contituencies_name not in self.constituencies_info:
-                    self.constituencies_info[contituencies_name] = Constituency(contituencies_name, region, country, total_voted, electotal)
-                    self.constituencies_info[contituencies_name].add_member(mp)
+                if contituencies_name not in self.__constituencies_info:
+                    self.__constituencies_info[contituencies_name] = Constituency(contituencies_name, region, country, total_voted, electotal)
+                    self.__constituencies_info[contituencies_name].add_member(mp)
 
-
-                if party not in self.party_info:
-                    self.party_info[party] = Party(party )
-                self.party_info[party].add_vote_of_selected(votes_of_winner)
-                self.party_info[party].add_member_party(mp.candidate_full_name)
+                if party not in self.__party_info:
+                    self.__party_info[party] = Party(party )
+                self.__party_info[party].add_vote_of_selected(votes_of_winner)
+                self.__party_info[party].add_member_party(mp.candidate_full_name)
 
 
     def add_votes(self, row, party):
@@ -152,10 +147,11 @@ class VotingAnalysis:
                     print('\n'.join([f' {count}-\t {i}' for count, i in enumerate(party_columns, 1)]))
                     try: 
                         p_name = int(input(f' select the number of the party form the list (1- {len(party_columns)}) ')) 
+
                         if  0 < p_name <= len(party_columns):
                             party = party_columns[p_name - 1]
                             total_vote = 0
-                            for row in self.database:
+                            for row in self.__database:
                                 if party in row:
                                     total_vote += int(row[party].replace(",", '') )
                             print("*" * 50)
@@ -168,7 +164,7 @@ class VotingAnalysis:
                     except ValueError:
                             print("Invalid input. Please enter a valid number.")
             else:
-                for row in self.database:
+                for row in self.__database:
                     if party_name in row:
                         total_vote += int(row[party].replace(",", '') )
                     return total_vote
@@ -179,7 +175,7 @@ class VotingAnalysis:
             print("".join([f"{count}:, {i}\n" for count , i in party_list]))
             p_name = int(input('choose a number of the party'))
             if 0< p_name <= len(party_list):  
-                for obj in self.party_info.values:
+                for obj in self.__party_info.values:
                     if obj.name.lower() == p_name.lower():
                         party_statics[obj.name] = {
                             'total_vote_of_selected': obj.total_selected_votes,
@@ -237,7 +233,7 @@ class VotingAnalysis:
                         raise ValueError('Not Valid input, Only alphabet please')
                     found = False
                     #print(name)
-                    for value in self.constituencies_info.values(): 
+                    for value in self.__constituencies_info.values(): 
                         #print(value.C_name.lower())
                         if value.C_name.lower() == name:
                                 print(value.display_constituncy_info())
@@ -295,16 +291,16 @@ class VotingAnalysis:
 
                 region_input = str(input('Enter the name of the region: ').lower())
                 assert country_input.isalpha(), f"the input is not alphabet"
-                list = Constituency.list_of_contituency_by_region(self.constituencies_info, region_input)
+                list = Constituency.list_of_contituency_by_region(self.__constituencies_info, region_input)
                 print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
                 while True:
                     try:
                         C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                         constituency_name = list[C_input - 1]
                         if order == 0: 
-                            self.constituencies_info[constituency_name].display_candidate_info()
+                            self.__constituencies_info[constituency_name].display_candidate_info()
                         else:
-                            self.constituencies_info[constituency_name].display_constituncy_info() 
+                            self.__constituencies_info[constituency_name].display_constituncy_info() 
                         if not self.ask_to_exit:
                             exit()    
                         else:
@@ -315,7 +311,7 @@ class VotingAnalysis:
                         print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
 
             elif country_input == "wales":
-                list =  Constituency.list_of_contituency_by_region(self.constituencies_info, country_input)
+                list =  Constituency.list_of_contituency_by_region(self.__constituencies_info, country_input)
                 print("\n choose the name of the name of your constituency from the list \n")
                 print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
                 while True:
@@ -323,9 +319,9 @@ class VotingAnalysis:
                         C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                         constituency_name = list[C_input - 1]
                         if order == 0:
-                            self.constituencies_info[constituency_name].display_candidate_info()
+                            self.__constituencies_info[constituency_name].display_candidate_info()
                         else:
-                            self.constituencies_info[constituency_name].display_constituncy_info()
+                            self.__constituencies_info[constituency_name].display_constituncy_info()
                         if not self.ask_to_exit():
                             exit()    
                         else:
@@ -336,7 +332,7 @@ class VotingAnalysis:
                         print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
             
             elif country_input == "scotland":
-                list =  Constituency.list_of_contituency_by_region(self.constituencies_info, country_input)
+                list =  Constituency.list_of_contituency_by_region(self.__constituencies_info, country_input)
                 print("\n choose the name of the name of your constituency from the list \n")
                 print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
                 while True:
@@ -344,9 +340,9 @@ class VotingAnalysis:
                         C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                         constituency_name = list[C_input - 1]
                         if order == 0:
-                            self.constituencies_info[constituency_name].display_candidate_info()
+                            self.__constituencies_info[constituency_name].display_candidate_info()
                         else:
-                            self.constituencies_info[constituency_name].display_constituncy_info()
+                            self.__constituencies_info[constituency_name].display_constituncy_info()
                         if not self.ask_to_exit():
                             exit()    
                         else:
@@ -357,7 +353,7 @@ class VotingAnalysis:
                         print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
 
             elif country_input == "northern ireland":
-                list =  Constituency.list_of_contituency_by_region(self.constituencies_info, country_input)
+                list =  Constituency.list_of_contituency_by_region(self.__constituencies_info, country_input)
                 print("\n choose the name of the name of your constituency from the list \n")
                 print("".join([f" {count}:\t {i} \n" for count , i  in enumerate(list,1)]))
                 while True:
@@ -365,9 +361,9 @@ class VotingAnalysis:
                         C_input = int(input(f'Enter the number of constituency: in a range (1 -{len(list)}): '))
                         constituency_name = list[C_input - 1]
                         if order == 0:
-                            self.constituencies_info[constituency_name].display_candidate_info()
+                            self.__constituencies_info[constituency_name].display_candidate_info()
                         else:
-                            self.constituencies_info[constituency_name].display_constituncy_info()
+                            self.__constituencies_info[constituency_name].display_constituncy_info()
                         if not self.ask_to_exit():
                             exit()    
                         else:
@@ -377,7 +373,7 @@ class VotingAnalysis:
                     except IndexError:
                         print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
             else:
-                Constituency.list_of_contituency_by_region(self.constituencies_info, country_input)
+                Constituency.list_of_contituency_by_region(self.__constituencies_info, country_input)
 
 
     def save_statics(self):
@@ -389,7 +385,7 @@ class VotingAnalysis:
                     fieldnames = ['Party', 'Total Votes', 'Total Selected Votes', 'Average Vote',  'Number of Party Members', 'Member List' ]
                     writer = csv.DictWriter(f, fieldnames)
                     writer.writeheader()
-                    for party, statics in self.party_info.items():
+                    for party, statics in self.__party_info.items():
                         writer.writerow({
                             'Party': party,
                             'Total Selected Votes': statics['total_vote_of_selected'],
@@ -405,3 +401,15 @@ class VotingAnalysis:
             print("Exit Program, Goodbay!")
             exit()
     
+    def _vaidate_input(prompt, min_val, max_val):
+         while True:
+            try:
+                    choice = int(input(prompt))
+
+                    if  min_val <= prompt <= max_val:
+                            return choice 
+
+                    else:
+                         print(f"Please enter a number between {min_val} and {max_val}.")
+            except ValueError:
+                 print("Invalid input. Please enter a number!")  
