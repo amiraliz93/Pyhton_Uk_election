@@ -1,5 +1,7 @@
 
 class MP:
+    """encapsulate MP attribute
+    """
     def __init__(self, f_name, l_name, gender, party, votes):
         self.f_name = f_name
         self.l_name = l_name
