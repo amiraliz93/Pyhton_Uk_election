@@ -1,4 +1,4 @@
-from . import Utility
+from . import utility
 import csv
 from  Classes.Constituency_class import Constituency
 from  Classes.MP_class import MP
@@ -47,7 +47,7 @@ class VotingAnalysis:
 
    
 
-        def read_file(self):   
+    def read_file(self):   
             """read data from csv file and store in a list
             Args:
                 file_path (csv): initial dataset
@@ -206,8 +206,8 @@ class VotingAnalysis:
                     match choice:
                         case "1":
                                     print( "".join([f" _____ \n {count}\t: {i} \n"for count, i in enumerate(Constituency.constituency_list, 1)]))
-                        case '2':
-                                    self.constituncy_information
+                        case "2":
+                                    self.constituncy_information()
                         case "3":
                                     self.find_MP_or_constituency(order=1)
                         case "4":
@@ -237,10 +237,10 @@ class VotingAnalysis:
                         raise ValueError('Not Valid input, Only alphabet please')
                     found = False
                     #print(name)
-                    for value in self.contituencies_info.values(): 
+                    for value in self.constituencies_info.values(): 
                         #print(value.C_name.lower())
                         if value.C_name.lower() == name:
-                                print(value.get_description())
+                                print(value.display_constituncy_info())
                                 found = True
                     if not found:
                         print("Region not found, please try again.")
