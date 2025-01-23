@@ -147,7 +147,7 @@ class VotingAnalysis:
                     print('\n'.join([f' {count}-\t {i}' for count, i in enumerate(party_columns, 1)]))
                     try: 
                         p_name = int(input(f' select the number of the party form the list (1- {len(party_columns)}) ')) 
-
+                        p_name = self._vaidate_input('select the number of the party form the list (1- {len(party_columns)', 1, len(party_columns))
                         if  0 < p_name <= len(party_columns):
                             party = party_columns[p_name - 1]
                             total_vote = 0
