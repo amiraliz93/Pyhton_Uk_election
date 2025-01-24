@@ -16,13 +16,14 @@ class Constituency:
             total_voted (int): accumulate of votes 
             total_voters (int): total of voters
         """
-        self.C_name = constituency_name
-        self.region_name = region_name
-        self.country_name = country_name
-        self.total_voted = int(total_voted if total_voted is not None else 0)
-        self.totalvoters = total_voters
-        self.candidate = []
-        self.discreption = {'Constituency name': self.C_name, 'Region name':self.region_name, 'Total Voted':self.totalvoters}
+        self._C_name = constituency_name
+        self._region_name = region_name
+        self._country_name = country_name
+        self._total_voted = int(total_voted if total_voted is not None else 0)
+        self._totalvoters = total_voters
+        self._candidate = []
+        self._discreption = {'Constituency name': self.C_name, 'Region name':self.region_name, 'Total Voted':self.totalvoters}
+
 
         Constituency.constituency_list.append(self.C_name)
     def __str__(self):
