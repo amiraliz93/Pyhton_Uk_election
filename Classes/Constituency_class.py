@@ -23,9 +23,30 @@ class Constituency:
         self._totalvoters = total_voters
         self._candidate = []
         self._discreption = {'Constituency name': self.C_name, 'Region name':self.region_name, 'Total Voted':self.totalvoters}
-
-
+        
         Constituency.constituency_list.append(self.C_name)
+
+        @property
+        def c_name(self):
+            return self._Cname
+
+        @property
+        def region_name(self):
+            return self._region_name
+        @property
+        def country_name(self):
+            return self._country_name
+        
+        @property
+        def total_voted(self):
+            return self._total_voted
+        
+        
+        @property
+        def discreption(self):
+            return self._discreption
+        
+        
     def __str__(self):
 
         f" the name of constituency is {self.name}"
@@ -44,7 +65,7 @@ class Constituency:
 
     
     def add_member(self, mp): 
-        self.candidate.append(mp)
+        self._candidate.append(mp)
     
 
     @staticmethod
