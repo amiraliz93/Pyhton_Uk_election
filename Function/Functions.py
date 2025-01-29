@@ -12,7 +12,7 @@ class VotingAnalysis:
         self._constituencies_info = {}
         self._party_info = {}
         self._database = self.read_file()
-        self.initialize_data
+        self.initialize_data()
    
 
 
@@ -37,9 +37,8 @@ class VotingAnalysis:
             print("6. save your statics to a file")
             print("7. Exit")
 
-            choice  = self._vaidate_input("Enter your choice: (1-6):",1,6)
-
-            action = menu_option.get(choice)
+            choice = self._validate_input("Enter your choice: (1-7):", 1, 7)
+            action = menu_option.get(str(choice))  # convert choice to string
             if action:
                 action()
             else:
@@ -63,7 +62,7 @@ class VotingAnalysis:
                         for row in read:
                             row_data.append(row)
                         #any(row_data.append(row) for row in read)
-                        row_data = row_data[:-15]
+                        #row_data = row_data[:-15]
             except Exception as e:
                 if e.__class__ == FileNotFoundError:
                     print(f" {utility.color_red}Error: File {utility.color_reset} '{self._file_path}' not found.")     
@@ -103,7 +102,7 @@ class VotingAnalysis:
                 if party not in self._party_info:
                     self._party_info[party] = Party(party )
                 self._party_info[party].add_vote_of_selected(votes_of_winner)
-                self._party_info[party].add_member_party(mp.candidate_full_name)
+                self._party_info[party].add_member_party(mp._candidate_full_name)
 
 
     def add_votes(self, row, party):
@@ -198,8 +197,9 @@ class VotingAnalysis:
                     print("4. Get back to main menu")
                     print("5. Exit program")
 
-                    choice = input("Enter your choice (1, 2, 3, or 4 to exit): ")
-                    match choice:
+                    choice = self._validate_input("Enter your choice (1, 2, 3, or 4 to exit): ",1, 4)
+                    #input("Enter your choice (1, 2, 3, or 4 to exit): ")
+                    match str(choice):
                         case "1":
                                     print( "".join([f" _____ \n {count}\t: {i} \n"for count, i in enumerate(Constituency.constituency_list, 1)]))
                         case "2":
@@ -243,9 +243,8 @@ class VotingAnalysis:
             
                             # Validate user input for continuation
                     while True:
-                        get_answer = input('\nDo you want to try another name? Answer Y or N (Y/N): ').lower()
-                        match get_answer:
-                            case 'y':
+                        self.question_to_back()
+                        #get_answer = input('\nDo you want to try another name? Answer Y or N (Y/N): ').lower()
                                 break  # Valid input, continue to the next iteration of the main loop
                             case 'n':
                                 return False # Valid input, exit the function
@@ -401,7 +400,8 @@ class VotingAnalysis:
             print("Exit Program, Goodbay!")
             exit()
     
-    def _vaidate_input(self, prompt, min_val, max_val):
+    def _validate_input(self, prompt, min_val, max_val):
+         
          while True:
             try:
                     choice = int(input(prompt))
@@ -412,4 +412,14 @@ class VotingAnalysis:
                     else:
                          print(f" the {choice} is not valid. Please enter a number between {min_val} and {max_val}.")
             except ValueError:
-                 print("Invalid input. Please enter a number!")  
+                 print("Invalid input. Please enter a number!")
+
+    def question_to_back(self):
+                        get_answer = input('\nDo you want to continue or get back? Answer Y or N (Y/N): ').lower()
+                        match get_answer:
+                            case 'y':
+                               return  True  # Valid input, continue to the next iteration of the main loop
+                            case 'n':
+                                return False # Valid input, exit the function
+                            case _ :
+                                print("Invalid input. Please enter 'Y' or 'N'.")

@@ -4,7 +4,6 @@ class Constituency:
 
     """
     constituency_list = [] # a list of constituency name
-
     def __init__(self, constituency_name, region_name, country_name, total_voted, total_voters):
         """
         Summary: initilise information to object
@@ -22,9 +21,10 @@ class Constituency:
         self._total_voted = int(total_voted if total_voted is not None else 0)
         self._totalvoters = total_voters
         self._candidate = []
-        self._discreption = {'Constituency name': self.C_name, 'Region name':self.region_name, 'Total Voted':self.totalvoters}
         
-        Constituency.constituency_list.append(self.C_name)
+        self._discreption = {'Constituency name': self._C_name, 'Region name':self._region_name, 'Total Voted':self._totalvoters}
+        
+        Constituency.constituency_list.append(self._C_name)
 
         @property
         def c_name(self):
@@ -40,7 +40,6 @@ class Constituency:
         @property
         def total_voted(self):
             return self._total_voted
-        
         
         @property
         def discreption(self):
