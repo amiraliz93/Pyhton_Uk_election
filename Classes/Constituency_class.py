@@ -27,8 +27,8 @@ class Constituency:
         Constituency.constituency_list.append(self._C_name)
 
         @property
-        def c_name(self):
-            return self._Cname
+        def C_name(self):
+            return self._C_name
 
         @property
         def region_name(self):
@@ -68,17 +68,17 @@ class Constituency:
     
 
     @staticmethod
-    def list_of_contituency_by_region(consitituencies_list, region):
+    def list_of_contituency_by_region(consitituencies_list: dict, region):
         """function to list constituency by region
 
-        Args:
-            consitituencies_list (int): list based on region
-            region (str): name of region
+    Args:
+        consitituencies_list (dict): dictionary of constituencies
+        region (str): name of region
 
-        Returns:
-            _type_: int 
+    Returns:
+        list: list of constituency names in the specified region
         """
-        return [item.C_name for item in consitituencies_list.values() if item.region_name.lower() == region.lower() ]
+        return [item._C_name for item in consitituencies_list.values() if item._region_name.lower() == region.lower() ]
     
     def display_candidate_info(self):
         percentage_vote = (self.candidate[0].votes /self.total_voted) * 100
