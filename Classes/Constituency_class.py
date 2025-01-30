@@ -1,4 +1,4 @@
-from Function.Functions import VotingAnalysis
+
 
 class Constituency:
     """class to encampsulate details for constituency attributes

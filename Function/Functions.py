@@ -23,8 +23,7 @@ class VotingAnalysis:
             '3': self.extract_party_static,
             '4': self.get_candidat_information,
             '5': self.find_MP_or_constituency,
-            '6': self.save_statics,
-            '7': self.exit_program
+            '6': self.exit_program
             
         }
         while True:
@@ -34,10 +33,10 @@ class VotingAnalysis:
             print("3. View Party Information")
             print("4. View Candidate information")
             print('5. Find out who your MP is')
-            print("6. save your statics to a file")
-            print("7. Exit")
+            print("6. Exit")
 
-            choice = self._validate_input("Enter your choice: (1-7):", 1, 7)            action = menu_option.get(str(choice))  # convert choice to string
+            choice = self._validate_input("Enter your choice: (1-6):", 1, 6)      
+            action = menu_option.get(str(choice))  # convert choice to string
             if action:
                 action()
             else:
@@ -60,13 +59,13 @@ class VotingAnalysis:
                         read = csv.DictReader(f)
                         for row in read:
                             row_data.append(row)
-                        #any(row_data.append(row) for row in read)
-                        #row_data = row_data[:-15]
             except Exception as e:
                 if e.__class__ == FileNotFoundError:
-                    print(f" {utility.color_red}Error: File {utility.color_reset} '{self._file_path}' not found.")     
+                    print(f" {utility.color_red}Error: File {utility.color_reset} '{self._file_path}' not found.") 
+                    return []    
                 else:
                     print(f"An error occurred: {e}")
+                    return []
             return row_data
 
 
@@ -359,27 +358,6 @@ class VotingAnalysis:
                         print(f"Invalid input. Please enter a number in the range (1 - {len(list)}).")
             else:
                 Constituency.list_of_contituency_by_region(self._constituencies_info, country_input)
-
-
-    def save_statics(self):
-
-            try:
-                with open('save_statics.csv', 'w', newline="") as f:
-                    f.write("Voting Statistics\n")
-                    f.write("================\n")
-                    fieldnames = ['Party', 'Total Votes', 'Total Selected Votes', 'Average Vote',  'Number of Party Members', 'Member List' ]
-                    writer = csv.DictWriter(f, fieldnames)
-                    writer.writeheader()
-                    for party, statics in self._party_info.items():
-                        writer.writerow({
-                            'Party': party,
-                            'Total Selected Votes': statics['total_vote_of_selected'],
-                            'Total Votes': statics['total_vote_for_party'],
-                            'average vote for this Party': statics['average_vote_for_this_Party'],
-                            'Number of Party Members': statics['Number_of_member_list'],
-                            'Members List': statics['Member_List']})
-            except IOError:
-                print("Failed to save statistics.")
 
 
     def exit_program(self):
