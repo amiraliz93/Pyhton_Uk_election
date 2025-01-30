@@ -37,8 +37,7 @@ class VotingAnalysis:
             print("6. save your statics to a file")
             print("7. Exit")
 
-            choice = self._validate_input("Enter your choice: (1-7):", 1, 7)
-            action = menu_option.get(str(choice))  # convert choice to string
+            choice = self._validate_input("Enter your choice: (1-7):", 1, 7)            action = menu_option.get(str(choice))  # convert choice to string
             if action:
                 action()
             else:
@@ -214,7 +213,10 @@ class VotingAnalysis:
                             print(f"Invalid choice \"{choice}\" is not an option. Please choose carfully!")
                 except Exception as e:
                     print(f'the error is {e}')
-                    
+
+    def get_candidate_by_name(self, surname):
+        return self._constituencies_info.get(surname.lower(), None)
+
 
     def constituncy_information(self):
             """ for option one from menue

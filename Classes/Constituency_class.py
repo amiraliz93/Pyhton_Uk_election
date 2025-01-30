@@ -1,3 +1,4 @@
+from Function.Functions import VotingAnalysis
 
 class Constituency:
     """class to encampsulate details for constituency attributes
@@ -90,8 +91,4 @@ class Constituency:
         print("*" * 50)
             #print(f"  - {candidate.candidate_full_name} - Candidate Party: ({candidate.party} total Vote: {candidate.v})")
 
-    def get_candidate_by_name(self, surname):
-        for candidate in self.candidates:
-            if candidate.candidate_surname.lower() == surname.lower():
-                return candidate
-        return None
+
