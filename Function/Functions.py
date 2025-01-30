@@ -12,7 +12,7 @@ class VotingAnalysis:
         self._constituencies_info = {}
         self._party_info = {}
         self._database = self.read_file()
-        self.initialize_data
+        self.initialize_data()
    
 
 
@@ -23,8 +23,7 @@ class VotingAnalysis:
             '3': self.extract_party_static,
             '4': self.get_candidat_information,
             '5': self.find_MP_or_constituency,
-            '6': self.save_statics,
-            '7': self.exit_program
+            '6': self.exit_program
             
         }
         while True:
@@ -34,12 +33,10 @@ class VotingAnalysis:
             print("3. View Party Information")
             print("4. View Candidate information")
             print('5. Find out who your MP is')
-            print("6. save your statics to a file")
-            print("7. Exit")
+            print("6. Exit")
 
-            choice  = self._vaidate_input("Enter your choice: (1-6):",1,6)
-
-            action = menu_option.get(choice)
+            choice = self._validate_input("Enter your choice: (1-6):", 1, 6)      
+            action = menu_option.get(str(choice))  # convert choice to string
             if action:
                 action()
             else:
@@ -62,13 +59,13 @@ class VotingAnalysis:
                         read = csv.DictReader(f)
                         for row in read:
                             row_data.append(row)
-                        #any(row_data.append(row) for row in read)
-                        row_data = row_data[:-15]
             except Exception as e:
                 if e.__class__ == FileNotFoundError:
-                    print(f" {utility.color_red}Error: File {utility.color_reset} '{self._file_path}' not found.")     
+                    print(f" {utility.color_red}Error: File {utility.color_reset} '{self._file_path}' not found.") 
+                    return []    
                 else:
                     print(f"An error occurred: {e}")
+                    return []
             return row_data
 
 
@@ -103,7 +100,7 @@ class VotingAnalysis:
                 if party not in self._party_info:
                     self._party_info[party] = Party(party )
                 self._party_info[party].add_vote_of_selected(votes_of_winner)
-                self._party_info[party].add_member_party(mp.candidate_full_name)
+                self._party_info[party].add_member_party(mp._candidate_full_name)
 
 
     def add_votes(self, row, party):
@@ -198,8 +195,9 @@ class VotingAnalysis:
                     print("4. Get back to main menu")
                     print("5. Exit program")
 
-                    choice = input("Enter your choice (1, 2, 3, or 4 to exit): ")
-                    match choice:
+                    choice = self._validate_input("Enter your choice (1, 2, 3, or 4 to exit): ",1, 4)
+                    #input("Enter your choice (1, 2, 3, or 4 to exit): ")
+                    match str(choice):
                         case "1":
                                     print( "".join([f" _____ \n {count}\t: {i} \n"for count, i in enumerate(Constituency.constituency_list, 1)]))
                         case "2":
@@ -214,7 +212,10 @@ class VotingAnalysis:
                             print(f"Invalid choice \"{choice}\" is not an option. Please choose carfully!")
                 except Exception as e:
                     print(f'the error is {e}')
-                    
+
+    def get_candidate_by_name(self, surname):
+        return self._constituencies_info.get(surname.lower(), None)
+
 
     def constituncy_information(self):
             """ for option one from menue
@@ -242,31 +243,14 @@ class VotingAnalysis:
                         print("Region not found, please try again.")
             
                             # Validate user input for continuation
-                    while True:
-                        get_answer = input('\nDo you want to try another name? Answer Y or N (Y/N): ').lower()
-                        match get_answer:
-                            case 'y':
-                                break  # Valid input, continue to the next iteration of the main loop
-                            case 'n':
-                                return False # Valid input, exit the function
-                            case _ :
-                                print("Invalid input. Please enter 'Y' or 'N'.")
-                except ValueError as e:
-                    print(e)
 
+                        
+                    if not self._ask_to_exit():
+                                exit()  
+                except Exception as e:
+                     if e.__class__ == ValueError:
+                          print(f" {utility.color_red}Error: Value erro  .")            
 
-    def ask_to_exit(self):
-            while True:
-                
-                input_user = input(" To get back to main menu type Y or N to exit program (Y/N): ").lower()
-                match input_user:
-                    case 'y':
-                        return True
-                    case "n":
-                        print("Exiting the program. Goodbye!")
-                        return False
-                    case _:
-                        print("Inalid Value please type Y or N")
 
     def find_MP_or_constituency(self,order=0):
             # show list of the region
@@ -301,7 +285,7 @@ class VotingAnalysis:
                             self._constituencies_info[constituency_name].display_candidate_info()
                         else:
                             self._constituencies_info[constituency_name].display_constituncy_info() 
-                        if not self.ask_to_exit:
+                        if not self._ask_to_exit:
                             exit()    
                         else:
                             break
@@ -322,7 +306,7 @@ class VotingAnalysis:
                             self._constituencies_info[constituency_name].display_candidate_info()
                         else:
                             self._constituencies_info[constituency_name].display_constituncy_info()
-                        if not self.ask_to_exit():
+                        if not self._ask_to_exit():
                             exit()    
                         else:
                             break
@@ -343,7 +327,7 @@ class VotingAnalysis:
                             self._constituencies_info[constituency_name].display_candidate_info()
                         else:
                             self._constituencies_info[constituency_name].display_constituncy_info()
-                        if not self.ask_to_exit():
+                        if not self._ask_to_exit():
                             exit()    
                         else:
                             break
@@ -364,7 +348,7 @@ class VotingAnalysis:
                             self._constituencies_info[constituency_name].display_candidate_info()
                         else:
                             self._constituencies_info[constituency_name].display_constituncy_info()
-                        if not self.ask_to_exit():
+                        if not self._ask_to_exit():
                             exit()    
                         else:
                             break
@@ -376,32 +360,12 @@ class VotingAnalysis:
                 Constituency.list_of_contituency_by_region(self._constituencies_info, country_input)
 
 
-    def save_statics(self):
-
-            try:
-                with open('save_statics.csv', 'w', newline="") as f:
-                    f.write("Voting Statistics\n")
-                    f.write("================\n")
-                    fieldnames = ['Party', 'Total Votes', 'Total Selected Votes', 'Average Vote',  'Number of Party Members', 'Member List' ]
-                    writer = csv.DictWriter(f, fieldnames)
-                    writer.writeheader()
-                    for party, statics in self._party_info.items():
-                        writer.writerow({
-                            'Party': party,
-                            'Total Selected Votes': statics['total_vote_of_selected'],
-                            'Total Votes': statics['total_vote_for_party'],
-                            'average vote for this Party': statics['average_vote_for_this_Party'],
-                            'Number of Party Members': statics['Number_of_member_list'],
-                            'Members List': statics['Member_List']})
-            except IOError:
-                print("Failed to save statistics.")
-
-
     def exit_program(self):
             print("Exit Program, Goodbay!")
             exit()
     
-    def _vaidate_input(self, prompt, min_val, max_val):
+    def _validate_input(self, prompt, min_val, max_val):
+         
          while True:
             try:
                     choice = int(input(prompt))
@@ -412,4 +376,18 @@ class VotingAnalysis:
                     else:
                          print(f" the {choice} is not valid. Please enter a number between {min_val} and {max_val}.")
             except ValueError:
-                 print("Invalid input. Please enter a number!")  
+                 print("Invalid input. Please enter a number!")
+
+    def _ask_to_exit(self):
+            while True:
+                
+                input_user = input(" To get back to main menu type Y or N to exit program (Y/N): ").lower()
+                match input_user:
+                    case 'y':
+                        return True
+                    case "n":
+                        print("Exiting the program. Goodbye!")
+                        return False
+                    case _:
+                        print("Inalid Value please type Y or N")
+

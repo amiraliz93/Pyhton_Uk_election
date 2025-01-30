@@ -1,10 +1,10 @@
 
+
 class Constituency:
     """class to encampsulate details for constituency attributes
 
     """
     constituency_list = [] # a list of constituency name
-
     def __init__(self, constituency_name, region_name, country_name, total_voted, total_voters):
         """
         Summary: initilise information to object
@@ -22,13 +22,14 @@ class Constituency:
         self._total_voted = int(total_voted if total_voted is not None else 0)
         self._totalvoters = total_voters
         self._candidate = []
-        self._discreption = {'Constituency name': self.C_name, 'Region name':self.region_name, 'Total Voted':self.totalvoters}
         
-        Constituency.constituency_list.append(self.C_name)
+        self._discreption = {'Constituency name': self._C_name, 'Region name':self._region_name, 'Total Voted':self._totalvoters}
+        
+        Constituency.constituency_list.append(self._C_name)
 
         @property
-        def c_name(self):
-            return self._Cname
+        def C_name(self):
+            return self._C_name
 
         @property
         def region_name(self):
@@ -40,7 +41,6 @@ class Constituency:
         @property
         def total_voted(self):
             return self._total_voted
-        
         
         @property
         def discreption(self):
@@ -69,17 +69,17 @@ class Constituency:
     
 
     @staticmethod
-    def list_of_contituency_by_region(consitituencies_list, region):
+    def list_of_contituency_by_region(consitituencies_list: dict, region):
         """function to list constituency by region
 
-        Args:
-            consitituencies_list (int): list based on region
-            region (str): name of region
+    Args:
+        consitituencies_list (dict): dictionary of constituencies
+        region (str): name of region
 
-        Returns:
-            _type_: int 
+    Returns:
+        list: list of constituency names in the specified region
         """
-        return [item.C_name for item in consitituencies_list.values() if item.region_name.lower() == region.lower() ]
+        return [item._C_name for item in consitituencies_list.values() if item._region_name.lower() == region.lower() ]
     
     def display_candidate_info(self):
         percentage_vote = (self.candidate[0].votes /self.total_voted) * 100
@@ -91,8 +91,4 @@ class Constituency:
         print("*" * 50)
             #print(f"  - {candidate.candidate_full_name} - Candidate Party: ({candidate.party} total Vote: {candidate.v})")
 
-    def get_candidate_by_name(self, surname):
-        for candidate in self.candidates:
-            if candidate.candidate_surname.lower() == surname.lower():
-                return candidate
-        return None
+
